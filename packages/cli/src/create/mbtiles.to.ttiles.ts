@@ -25,8 +25,9 @@ export async function toTarTiles(
   const db = bs3(filename);
 
   const tileCount = await db.prepare('SELECT count(*) from tiles;').pluck().get();
+  logger.info({ path: tarFileName, count: tileCount }, 'Covt.Tar:Start');
 
-  const query = db.prepare(`SELECT * from tiles ${Limit}`);
+  const query = db.prepare(`SELECT * from tiles order by zoom_level ${Limit}`);
 
   const startTime = Date.now();
   let writeCount = 0;
@@ -43,13 +44,13 @@ export async function toTarTiles(
       const percent = ((writeCount / tileCount) * 100).toFixed(2);
       const duration = Date.now() - startTileTime;
       startTileTime = Date.now();
-      logger.debug({ count: writeCount, total: tileCount, percent, duration }, 'Tar:WriteTile');
+      logger.debug({ current: writeCount, total: tileCount, percent, duration }, 'Covt.Tar:WriteTile');
     }
     writeCount++;
   }
 
-  logger.debug('Tar:Finalize');
+  logger.debug('Covt.Tar:Finalize');
   packer.finalize();
   await writeProm;
-  logger.info({ path: tarFileName, count: writeCount, duration: Date.now() - startTime }, 'Tar:Done');
+  logger.info({ path: tarFileName, count: writeCount, duration: Date.now() - startTime }, 'Covt.Tar:Done');
 }
