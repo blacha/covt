@@ -1,8 +1,6 @@
 import { ChunkSource, LogType } from '@cogeotiff/chunk';
-import { TarIndex, TarIndexRecord } from './tar.index';
+import { TarIndexRecord } from './tar.index';
 import { xyzToPath } from './tile.name';
-
-const utf8Decoder = new TextDecoder('utf-8');
 
 export class Covt {
   source: ChunkSource;
@@ -10,26 +8,19 @@ export class Covt {
 
   index: Map<string, TarIndexRecord> = new Map();
 
-  constructor(source: ChunkSource, sourceIndex: ChunkSource) {
+  constructor(source: ChunkSource) {
     this.source = source;
-    this.sourceIndex = sourceIndex;
   }
 
-  protected async loadIndex(): Promise<Covt> {
-    const bytes = await this.sourceIndex.read();
-    console.time('LoadIndex:Parse');
-    const index = JSON.parse(utf8Decoder.decode(bytes)) as TarIndex;
-    console.timeEnd('LoadIndex:Parse');
-
-    console.time('LoadIndex:Map');
+  protected async loadIndex(index: TarIndexRecord[]): Promise<Covt> {
+    // console.time('LoadIndex:Map');
     for (const r of index) this.index.set(r[0], r);
-    console.timeEnd('LoadIndex:Map');
-
+    // console.timeEnd('LoadIndex:Map');
     return this;
   }
 
-  static async create(source: ChunkSource, sourceIndex: ChunkSource): Promise<Covt> {
-    return new Covt(source, sourceIndex).loadIndex();
+  static async create(source: ChunkSource, index: TarIndexRecord[]): Promise<Covt> {
+    return new Covt(source).loadIndex(index);
   }
 
   async getTile(
