@@ -1,5 +1,5 @@
 import { SourceFile } from '@cogeotiff/source-file';
-import { Covt } from '@covt/core';
+import { Covt, xyzToPath } from '@covt/core';
 import fastify from 'fastify';
 import { promises as fs } from 'fs';
 import pino from 'pino';
@@ -17,15 +17,43 @@ async function createServer(fileName: string, port: number): Promise<void> {
 
   const covt = await Covt.create(source, index);
 
-  const server = fastify({ logger });
+  const server = fastify({ logger: false });
   server.register(fastifyCors);
+
+  server.get<{ Params: { x: string; z: string; '*': string } }>(
+    '/files/tiles/:z/:x/*',
+    async (req, res): Promise<unknown> => {
+      const [yStr, ext] = req.params['*'].split('.');
+      if (ext !== 'pbf' && ext !== 'pbf.gz') {
+        res.status(404).send();
+        return;
+      }
+      const z = Number(req.params.z);
+      const x = Number(req.params.x);
+      const y = (1 << z) - 1 - Number(yStr);
+
+      if (isNaN(x) || isNaN(y) || isNaN(z)) {
+        res.status(404).send();
+        return;
+      }
+
+      const file = await covt.getTile(x, y, z);
+      if (file == null) {
+        res.status(404).send();
+        return;
+      }
+      res.header('content-encoding', 'gzip');
+      res.header('content-type', 'application/x-protobuf');
+      res.send(Buffer.from(file.buffer));
+      return { hello: 'world' };
+    },
+  );
 
   server.get<{ Params: { '*': string } }>(
     '/file/*',
     async (req, res): Promise<unknown> => {
       const path = req.params['*'];
       logger.info({ path: `${url}/file/${path}` }, 'GetFile');
-      console.log({ params: req.params });
       const file = await covt.getFile(path);
       if (file == null) {
         res.status(404).send();
@@ -43,7 +71,7 @@ async function createServer(fileName: string, port: number): Promise<void> {
 
   server.get('/tile.json', (req, res) => {
     res.send({
-      tiles: [`${url}/file/tiles/{z}/{x}/{y}.pbf?api=` + Math.random().toString(32).slice(2)],
+      tiles: [`${url}/file/${xyzToPath('{x}', '{y}', '{z}')}?api=` + Math.random().toString(32).slice(2)],
       minzoom: 0,
       maxzoom: 15,
       format: 'pbf',
