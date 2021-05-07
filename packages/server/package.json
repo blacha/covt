@@ -7,7 +7,7 @@
     "@cogeotiff/source-file": "^4.2.0",
     "@covt/core": "^1.1.0",
     "fastify": "^3.14.1",
-    "fastify-cors": "^5.2.0",
+    "fastify-cors": "^6.0.1",
     "pino": "^6.11.0",
     "pretty-json-log": "^0.3.2"
   },
