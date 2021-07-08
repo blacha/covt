@@ -1014,9 +1014,9 @@
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
 "@types/better-sqlite3@^5.4.1":
-  version "5.4.1"
-  resolved "https://registry.yarnpkg.com/@types/better-sqlite3/-/better-sqlite3-5.4.1.tgz#d45600bc19f8f41397263d037ca9b0d05df85e58"
-  integrity sha512-8hje3Rhsg/9veTkALfCwiWn7VMrP1QDwHhBSgerttYPABEvrHsMQnU9dlqoM6QX3x4uw3Y06dDVz8uDQo1J4Ng==
+  version "5.4.3"
+  resolved "https://registry.yarnpkg.com/@types/better-sqlite3/-/better-sqlite3-5.4.3.tgz#4f1142c02db111627d9c5792f8aa349fcf46d100"
+  integrity sha512-d4T8Htgz3sQL3u5oVwkWipZLBYUooKEA4fhU9Sp4F6VDIhifQo1NR/IDtnAIID0Y9IXV3TQnNhv6S+m8TnkEdg==
   dependencies:
     "@types/integer" "*"
 
