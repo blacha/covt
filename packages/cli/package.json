@@ -17,7 +17,7 @@
     "tar-stream": "^2.2.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^5.4.1",
+    "@types/better-sqlite3": "^7.4.1",
     "@types/node": "^14.14.22",
     "@types/pino": "^6.3.5",
     "@types/tar-stream": "^2.2.0"
