@@ -8,7 +8,7 @@
     "@covt/core": "^1.1.0",
     "fastify": "^3.14.1",
     "fastify-cors": "^5.2.0",
-    "pino": "^6.11.0",
+    "pino": "^7.6.4",
     "pretty-json-log": "^0.3.2"
   },
   "devDependencies": {
