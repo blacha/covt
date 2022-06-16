@@ -6,7 +6,7 @@
   "dependencies": {
     "@cogeotiff/source-file": "^4.2.0",
     "@covt/core": "^1.1.0",
-    "fastify": "^3.14.1",
+    "fastify": "^4.0.3",
     "fastify-cors": "^5.2.0",
     "pino": "^6.11.0",
     "pretty-json-log": "^0.3.2"
